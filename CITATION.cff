@@ -1,0 +1,47 @@
+cff-version: 1.2.0
+message: "If you use SPOUT, please cite the methods paper and the archived software release."
+title: "SPOUT software (firmware + MATLAB GUI)"
+type: software
+authors:
+  - given-names: "Bastijn J.G."
+    family-names: "van den Boom"
+    email: bastijnvandenboom@gmail.com
+    # orcid: "https://orcid.org/0000-0000-0000-0000"   # TODO: add ORCID
+  - given-names: "D."
+    family-names: "Dash"
+  - given-names: "M."
+    family-names: "Rutherford"
+  - given-names: "A.E."
+    family-names: "Girasole"
+  - given-names: "P."
+    family-names: "Gorelik"
+  - given-names: "O."
+    family-names: "Mazor"
+  - given-names: "Bernardo L."
+    family-names: "Sabatini"
+    email: bernardo_sabatini@hms.harvard.edu
+repository-code: "https://github.com/spout-task"
+version: 0.0.0            # TODO: set at first tagged release
+date-released: 2026-01-01 # TODO: set at first tagged release
+preferred-citation:
+  type: article
+  title: >-
+    SPOUT: An open-source hardware and software platform to study decision making while
+    manipulating and recording from neural activity
+  authors:
+    - given-names: "Bastijn J.G."
+      family-names: "van den Boom"
+    - given-names: "D."
+      family-names: "Dash"
+    - given-names: "M."
+      family-names: "Rutherford"
+    - given-names: "A.E."
+      family-names: "Girasole"
+    - given-names: "P."
+      family-names: "Gorelik"
+    - given-names: "O."
+      family-names: "Mazor"
+    - given-names: "Bernardo L."
+      family-names: "Sabatini"
+  year: 2026
+  journal: "TODO"

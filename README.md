@@ -25,7 +25,7 @@ handles the serial link.
 Predefined settings for each task live in the separate [settings](https://github.com/spout-task/settings) repository.
 
 ## Requirements
-- **MATLAB** [version TODO] with App Designer. Toolboxes: [TODO].
+- **MATLAB** (tested on 2021b through 2026a) with **App Designer** and the **Instrument Control Toolbox** (for the serial link to the Teensy).
 - **Arduino IDE** with **Teensyduino** for flashing firmware.
 
 ## Related repositories

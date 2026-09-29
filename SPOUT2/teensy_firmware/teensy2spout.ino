@@ -31,7 +31,7 @@
 
 
 // the following setting is required for testing
-const bool SpoutNotButton = false;  // you use spouts (pull down, true) or buttons (pull up, false)
+const bool SpoutNotButton = true;  // you use spouts (pull down, true) or buttons (pull up, false)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 // --------------------------- Modify pin numbers if needed ---------------------------------------- //
@@ -119,6 +119,9 @@ bool taskLLLR;             // LLLR task (default)
 bool task2ABT;             // two-armed bandit task (2ABT)
 bool taskPavlovian;        // Pavlovian conditioning task
 bool taskDelayedResponse;  // Delayed-Response task: CUE -> DELAY -> START_CUE -> SELECTION
+
+// Pavlovian lick-to-start (trial initiation lick)
+bool PavlovianLickToStart;  // true = Pavlovian only: after a DELIVERED reward, the animal must lick the block spout (during CONSUMPTION or WAIT_LICK) before the next trial (ITI/ENL) starts
 
 // ITI mode
 bool ENLEnabled;  // if true, ITI becomes an enforced non-lick period, otherwise plain ITI: licks recorded but do not reset the trial
@@ -306,6 +309,10 @@ unsigned long timeInTaper = 0;         // keep track of current time in opto tap
 unsigned long tmpOptoMod = 0;          // keep track of current opto modulation for tapering
 bool manualOptoTestActive = false;     // true while the GUI manual opto test switch is ON
 
+// Lick-to-start bookkeeping (Pavlovian)
+bool correctLickAfterReward = false;   // true once the animal licked the block spout during CONSUMPTION and/or WAIT_LICK of a rewarded trial
+bool rewardDeliveredThisTrial = false;  // true if the REWARD state was entered this trial (lick-to-start only required after a delivered reward)
+
 // Error light bookkeeping
 bool errorLightActive = false;          // is the error light currently on
 unsigned long errorLightStartTime = 0;  // timestamp when error light was turned on
@@ -360,6 +367,7 @@ enum state {
   NEW_TRIAL,
   ITI,
   ENL_PENALTY,
+  WAIT_LICK,         // Pavlovian lick-to-start: after a delivered reward, if no block-spout lick during CONSUMPTION, wait for it before NEW_TRIAL
   CUE,
   CUE_PENALTY,
   DELAY,             // DR task: delay between sample cue and go cue
@@ -438,7 +446,8 @@ bool* boolParams[] = {
   &OptoActiveDuringDelay,       // opto during DELAY state (DR)
   &OptoActiveDuringStartCue,    // opto during START_CUE state (DR)
   &AllowMultiOptoStimDelay,     // re-arm delay opto on delay penalty (DR)
-  &AllowMultiOptoStimStartCue   // re-arm startcue opto on startcue penalty (DR)
+  &AllowMultiOptoStimStartCue,  // re-arm startcue opto on startcue penalty (DR)
+  &PavlovianLickToStart         // Pavlovian lick-to-start: wait for block-spout lick after outcome, before next trial
 };
 
 unsigned long* ulongParams[] = {
@@ -662,6 +671,8 @@ void updateStateMachine() {
       digitalWrite(ErrorLightPin, LOW);
       errorLightActive = false;
       manualStartCueActive = false;             // ensure manual start cue test is cleared on idle
+      correctLickAfterReward = false;           // Pavlovian lick-to-start
+      rewardDeliveredThisTrial = false;         // Pavlovian lick-to-start
     }
 
     //   ----------------------------   START_DELAY   ----------------------------
@@ -828,6 +839,25 @@ void updateStateMachine() {
       if (!LeftLickOccuring && !RightLickOccuring) {
         NextState = ITI;
       }
+    }
+
+    //   ----------------------------   WAIT_LICK (Pavlovian lick-to-start)   ----------------------------
+    // - only reached when taskPavlovian && PavlovianLickToStart, after CONSUMPTION of a DELIVERED reward,
+    //   AND the animal did NOT yet lick the block spout during CONSUMPTION
+    // - wait (indefinitely) for a lick on the current block's spout (left block -> left spout, right block -> right spout)
+    // - licks on the other spout are recorded (lickDetection) but ignored here
+    // - once that lick ENDS we go to NEW_TRIAL -> ITI/ENL (so the lick can't trigger an ENL penalty)
+  } else if (CurrentState == WAIT_LICK) {
+
+    // track correct (block-spout) lick
+    trackCorrectLickAfterReward();
+
+    // correct lick made and it has ended -> start new trial
+    bool blockSpoutLicking = (BlockType == LEFT_BLOCK) ? LeftLickOccuring : RightLickOccuring;
+    if (correctLickAfterReward && !blockSpoutLicking) {
+      rewardDeliveredThisTrial = false;
+      correctLickAfterReward = false;
+      NextState = NEW_TRIAL;
     }
 
     //   ----------------------------   CUE   ----------------------------
@@ -1433,6 +1463,10 @@ void updateStateMachine() {
         optoCueLick = true;  // potential lick during cue opto
       }
 
+      // reset: set to true only if REWARD is actually entered this trial (Pavlovian lick-to-start)
+      rewardDeliveredThisTrial = false;
+      correctLickAfterReward = false;
+
       // define next state: use giveReward for correct, giveRewardIncorrect for incorrect spout
       bool shouldReward = correctSelection ? giveReward : giveRewardIncorrect;
       if (shouldReward) {
@@ -1517,6 +1551,7 @@ void updateStateMachine() {
         Num_Reward = Num_Reward + 1;
       }
       RewardStartTime = millis();
+      rewardDeliveredThisTrial = true;  // Pavlovian lick-to-start: a reward was delivered this trial
       if (TrialsUntilFirstReward == 0) {
         TrialsUntilFirstReward = TrialInBlock;
         TrialsUntilFirstRewardHistory[BlockNum - 1] = TrialsUntilFirstReward;
@@ -1594,6 +1629,9 @@ void updateStateMachine() {
       }
     }
 
+    // Pavlovian lick-to-start: track correct (block-spout) lick during consumption of a delivered reward
+    trackCorrectLickAfterReward();
+
     // check if we need to give a free reward
     if (millis() - ConsumptionStartTime >= ConsumptionDuration) {
       if (fails2reward > 0 && failCounter >= fails2reward) {  // Give free reward if threshold is met
@@ -1611,7 +1649,16 @@ void updateStateMachine() {
       } else {
 
         // start new trial
-        NextState = NEW_TRIAL;
+        // Pavlovian lick-to-start: after a DELIVERED reward the animal must have licked the block spout
+        // during CONSUMPTION; if not, wait for that lick in WAIT_LICK.
+        // unrewarded trials (RewardProb < 100) go straight to the next trial
+        if (taskPavlovian && PavlovianLickToStart && rewardDeliveredThisTrial && !correctLickAfterReward) {
+          NextState = WAIT_LICK;
+        } else {
+          rewardDeliveredThisTrial = false;
+          correctLickAfterReward = false;
+          NextState = NEW_TRIAL;
+        }
       }
     }
 
@@ -1901,6 +1948,21 @@ void lickDetection() {
     rightLickCounter += 1;
   }
   // Lick Detection END //
+}
+
+// Pavlovian lick-to-start: during CONSUMPTION / WAIT_LICK of a rewarded trial, register the first lick
+// on the current block's spout (left block -> left spout, right block -> right spout).
+// A lick that is still ongoing when CONSUMPTION starts (e.g. started during REWARD) also counts.
+void trackCorrectLickAfterReward() {
+  if (!(taskPavlovian && PavlovianLickToStart && rewardDeliveredThisTrial) || correctLickAfterReward) {
+    return;
+  }
+  bool blockSpoutLicking = (BlockType == LEFT_BLOCK) ? LeftLickOccuring : RightLickOccuring;
+  if (blockSpoutLicking) {
+    correctLickAfterReward = true;
+    unsigned long lickOnset = (BlockType == LEFT_BLOCK) ? LeftLickStartTime : RightLickStartTime;
+    outputEvent("CORRECT_LICK", lickOnset, 0);
+  }
 }
 
 // Increment trial count and update block
@@ -2209,6 +2271,9 @@ void outputTrialState() {
   } else if (CurrentState == CUE_PENALTY) {
     stateName = "CUE_PENALTY";
     duration = CuePenaltyDuration;
+  } else if (CurrentState == WAIT_LICK) {
+    stateName = "WAIT_LICK";
+    duration = 0;  // open-ended: waits until the animal licks
   } else if (CurrentState == DELAY) {
     stateName = "DELAY";
     duration = DelayDuration;
@@ -3129,6 +3194,12 @@ void interpretUSBMessage(String message) {
     } else {
       AllowMultiOptoStimStartCue = false;
     }
+  } else if (command == "cz") {  // Pavlovian lick-to-start: on (1) or off (0)
+    if (arg1 == 1) {
+      PavlovianLickToStart = true;
+    } else {
+      PavlovianLickToStart = false;
+    }
   } else if (command == "ay") {  // to save memory, do not call until needed
     saveParams();                // will update EEPROM with current values for variables
   } else if (command == "az") {  // Send current parameters -> setup command for matlab gui to read correct values
@@ -3282,6 +3353,8 @@ void interpretUSBMessage(String message) {
     Serial.println(AllowMultiOptoStimDelay);
     Serial.print("Multi-stim In StartCue\t");
     Serial.println(AllowMultiOptoStimStartCue);
+    Serial.print("Pavlovian Lick To Start\t");
+    Serial.println(PavlovianLickToStart);
     Serial.print("EEPROM settings\t");
     Serial.println(1);
   }

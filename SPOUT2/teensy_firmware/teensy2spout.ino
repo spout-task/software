@@ -3355,6 +3355,8 @@ void interpretUSBMessage(String message) {
     Serial.println(AllowMultiOptoStimStartCue);
     Serial.print("Pavlovian Lick To Start\t");
     Serial.println(PavlovianLickToStart);
+    Serial.print("Block Switch After Correct\t");
+    Serial.println(BlockSwitchAfterCorrectTrials);
     Serial.print("EEPROM settings\t");
     Serial.println(1);
   }

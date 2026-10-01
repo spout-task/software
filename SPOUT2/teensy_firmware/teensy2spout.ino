@@ -3322,10 +3322,6 @@ void interpretUSBMessage(String message) {
     Serial.println(ApplyOptoRandomLight);
     Serial.print("Cues Instructed\t");
     Serial.println(cuesInstructed);
-    Serial.print("Pavlovian Mode\t");
-    Serial.println(taskPavlovian);
-    Serial.print("Reward Delay\t");
-    Serial.println(RewardDelay);
     Serial.print("ENL Enabled\t");
     Serial.println(ENLEnabled);
     Serial.print("ENL Penalty Duration\t");

@@ -58,16 +58,16 @@ classdef AppArduinoConnection < handle
         % Method to find the first Arduino/Teensy port
         function port = findFirstArduinoPort()
 
-            % OFER
     		% finds the first port with an Arduino on it.
     		port = [];
 
     		% OSX code:
-    		serialInfo = instrhwinfo('serial');
     		archstr = computer('arch');
     		if strcmp(archstr,'maci64')
-                for portN = 1:length(serialInfo.AvailableSerialPorts)
-                    portName = serialInfo.AvailableSerialPorts{portN};
+                % serialportlist is base MATLAB (replaces instrhwinfo from the Instrument Control Toolbox)
+                availablePorts = serialportlist("available");
+                for portN = 1:length(availablePorts)
+                    portName = char(availablePorts(portN));
                     if strfind(portName,'tty.usbmodem')
                         port = portName;
                         return
@@ -128,7 +128,7 @@ classdef AppArduinoConnection < handle
     		            devs{i,1} = out{ind}(27:end-len);
     		            devs{i,2} = coms{i};
     		        end
-    		    end
+                end
     		    % get the first arduino port
     		    for i = 1:numel(coms)
     		        [portFriendlyName, portName] = devs{i,:};

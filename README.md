@@ -10,8 +10,9 @@ SPOUT2/  teensy_firmware/ (teensy2spout.ino)   matlab_GUI/ (SPOUT2.mlapp + AppAr
 ```
 
 ## Firmware
-The Teensy runs the full task state machine (the host is never in the real-time loop). Open
-the `.ino` in the Arduino IDE with **Teensyduino** and upload to the Teensy.
+The Teensy runs the full task state machine (the host computer with the MATLAB GUI just reading Teensy). Open
+the `.ino` in the Arduino IDE with **Teensyduino** and upload to the Teensy. Teensy EEPROM stores last settings
+across sessions (even when power is off).
 
 ## MATLAB GUI
 `SPOUTn.mlapp` (MATLAB App Designer) connects to the Teensy, loads a task settings file,
@@ -25,7 +26,7 @@ handles the serial link.
 Predefined settings for each task live in the separate [settings](https://github.com/spout-task/settings) repository.
 
 ## Requirements
-- **MATLAB** (tested on 2021b through 2026a) with **App Designer**.
+- **MATLAB** (tested on 2021b through 2026a).
 - **Arduino IDE** with **Teensyduino** for flashing firmware.
 
 ## Related repositories

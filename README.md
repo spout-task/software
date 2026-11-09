@@ -31,15 +31,15 @@ Predefined settings for each task live in the separate [settings](https://github
 
 ## SPOUT1 and SPOUT2 GUI's 
 
+Figure of SPOUT1 GUI:
 <p align="center">
   <img src="SPOUT1.png" alt="SPOUT1 GUI">
 </p>
-<i>Figure - SPOUT1 GUI</i>
-  
+
+Figure of SPOUT2 GUI:
 <p align="center">
   <img src="SPOUT2.png" alt="SPOUT2 GUI">
 </p>
-<i>Figure - SPOUT2 GUI</i>
 
 ## Related repositories
 [hardware](https://github.com/spout-task/hardware) · [analyses](https://github.com/spout-task/analyses) · [settings](https://github.com/spout-task/settings) · [example_data](https://github.com/spout-task/example_data)

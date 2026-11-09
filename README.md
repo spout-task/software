@@ -32,12 +32,12 @@ Predefined settings for each task live in the separate [settings](https://github
 ## SPOUT1 and SPOUT2 GUI's 
 
 <p align="center">
-  <img src="SPOUT1" alt="SPOUT1 GUI">
+  <img src="SPOUT1.png" alt="SPOUT1 GUI">
 </p>
-<i>Figure - SPOUT1 GUI</i>i
+<i>Figure - SPOUT1 GUI</i>
   
 <p align="center">
-  <img src="SPOUT2" alt="SPOUT2 GUI">
+  <img src="SPOUT2.png" alt="SPOUT2 GUI">
 </p>
 <i>Figure - SPOUT2 GUI</i>
 

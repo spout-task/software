@@ -1,5 +1,7 @@
-// This is a general one-spout state machine to run 1-spout tasks (Go-Nogo / Stop / Ratio schedules / Pavlovian)
-// Sketch runs experiment and communicates with Bastijn's Matlab GUI (oneSpout.mlapp)
+// SPOUT1 - State-machine Platform for Uni/dual-spout Tasks
+// This is a general one spout state machine to run SPOUT1 tasks
+// go/nogo, stop-signal, fixed vs progressive ratio, Pavlovian
+// Sketch runs experiment and communicates with SPOUT2 Matlab GUI
 //
 // State machine is build off teensy2spouts.ino:
 //  - Single spout (the LEFT-side hardware on the breakout board) - all reward/lick logic uses one valve
@@ -33,7 +35,7 @@
 #include <EEPROM.h>
 
 // hardware setting for testing
-const bool SpoutNotButton = false;  // true = spouts (pull down), false = buttons (pull up)
+const bool SpoutNotButton = true;  // true = spouts (pull down), false = buttons (pull up)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 // --------------------------- Modify pin numbers if needed ---------------------------------------- //

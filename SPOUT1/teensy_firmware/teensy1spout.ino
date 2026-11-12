@@ -2,32 +2,33 @@
 // This is a general one spout state machine to run SPOUT1 tasks
 // go/nogo, stop-signal, fixed vs progressive ratio, Pavlovian
 // Sketch runs experiment and communicates with SPOUT2 Matlab GUI
-//
+
 // State machine is build off teensy2spouts.ino:
-//  - Single spout (the LEFT-side hardware on the breakout board) - all reward/lick logic uses one valve
+//  - Uni spout (the LEFT-side hardware on the breakout board) - all reward/lick logic uses one valve
 //  - Trial-type semantics renamed LEFT/RIGHT -> A/B because there is no physical left/right
-//      Go-Nogo:      A = Go trial (lick to reward)
-//                    B = NoGo trial (withhold to reward)
-//      Pavlovian:    A = CS+ (rewarded with prob)
-//                    B = CS- (never rewarded)
-//      Ratio:        A = FR or PR
-//                    B = not in use
-//      Stop-signal:  A = Go cue (# licks + selection time for reward)
-//                    B = Stop (no licks after cue)
+//      Go-Nogo:                        A = Go trial (lick to reward)
+//                                      B = NoGo trial (withhold to reward)
+//      Pavlovian:                      A = CS+ (rewarded with prob)
+//                                      B = CS- (never rewarded)
+//      Ratio (fixed vs progressive):   A = FR or PR
+//                                      B = not in use
+//      Stop-signal:                    A = Go cue (# licks + selection time for reward)
+//                                      B = Stop (no licks after cue)
 //  - Four mutually exclusive task modes: taskGoNogo (default), taskStop, taskRatio, taskPavlCond
 //  - Same hardware pins / serial protocol style / EEPROM scheme / opto / sync as 2-spout
 
-// Pavel's breakout board for Teensy 4
-// PIN2 (PWM) - SpeakerPinA
-// PIN3 (PWM) - SyncPin
-// PIN4_SLN1 - copy SLN1
-// PIN5_SLN2 - copy SLN2
-// ANALOG_A1 - SpeakerPinB
-// ANALOG_A0 - LickPin
-// DAC1 (PIN41) - UnusedLickPin (kept defined for hardware compat with 2-spout)
-// DAC0 (PIN40) - OptoPin
+// Teensy 4 breakout board
+// PIN2_S2 (PWM) - SpeakerPinA
+// PIN3_S1 (PWM) - SyncPin
+// PIN5_SLN1 - TTL SLN1 reward
+// PIN15_A1 (ANALOG_A1) - SpeakerPinB
+// PIN14_A0 (ANALOG_A0) - LickPin
+// PIN40_A16 (DAC0) - OptoPin
+
+// Other pins in use
 // PIN9  - OptoModPin
 // PIN21 - RandomLightPin
+// PIN22 - External Sync pulse
 
 // Serial-out buffering: same scheme as 2-spout. We append to serialOutBuffer (String)
 // and updateSerialOutput() flushes up to MAX_CHARS_PER_LOOP characters per loop iteration.
@@ -35,7 +36,7 @@
 #include <EEPROM.h>
 
 // hardware setting for testing
-const bool SpoutNotButton = true;  // true = spouts (pull down), false = buttons (pull up)
+const bool SpoutNotButton = false;  // true = spouts (pull down), false = buttons (pull up)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 // --------------------------- Modify pin numbers if needed ---------------------------------------- //

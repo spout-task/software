@@ -1,5 +1,7 @@
-// This is a general two spouts state machine to run 2 spout tasks (LLLR/2ABT/Pavlovian)
-// Sketch runs experiment and communicates with Melanie/Bastijn's Matlab GUI
+// SPOUT2 - State-machine Platform for Uni/dual-spout Tasks
+// This is a general two spouts state machine to run SPOUT2 tasks
+// instructed vs uninstructed LL/LR, 2ABT, DR, Pavlovian
+// Sketch runs experiment and communicates with SPOUT2 Matlab GUI
 
 // Pavel's breakout board for Teensy 4
 // PIN2 (PWM) - SpeakerPinL

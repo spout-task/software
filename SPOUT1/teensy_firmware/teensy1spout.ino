@@ -1,7 +1,7 @@
 // SPOUT1 - State-machine Platform for Uni/dual-spout Tasks
 // This is a general one spout state machine to run SPOUT1 tasks
 // go/nogo, stop-signal, fixed vs progressive ratio, Pavlovian
-// Sketch runs experiment and communicates with SPOUT2 Matlab GUI
+// Sketch runs experiment and communicates with SPOUT1 Matlab GUI
 
 // State machine is build off teensy2spouts.ino:
 //  - Uni spout (the LEFT-side hardware on the breakout board) - all reward/lick logic uses one valve

@@ -3,17 +3,37 @@
 // instructed vs uninstructed LL/LR, 2ABT, DR, Pavlovian
 // Sketch runs experiment and communicates with SPOUT2 Matlab GUI
 
-// Pavel's breakout board for Teensy 4
-// PIN2 (PWM) - SpeakerPinL
-// PIN3 (PWM) - SyncPin
-// PIN4_SLN1 - copy SLN1
-// PIN5_SLN2 - copy SLN2
+// State machine runs various tasks:
+//  - Dual spout (the LEFT- and RIGHT-side hardware on the breakout board), each spout has its own valve, reward size range and lick input
+//  - Trial-type semantics LEFT/RIGHT (BlockType = LEFT_BLOCK or RIGHT_BLOCK), the block spout is the correct spout
+//  - Reward: correct spout rewarded with RewardProb, incorrect spout with the converse prob (100 - RewardProb)
+//      LLLR:         LEFT  = cue, lick left spout in selection window for reward
+//                    RIGHT = cue, lick right spout in selection window for reward
+//                    block switch after N trials, or N correct trials (BlockSwitchAfterCorrectTrials)
+//      2ABT:         LEFT  = left spout high prob, right spout converse prob
+//                    RIGHT = right spout high prob, left spout converse prob
+//                    Markov reversal: 2% per trial after min block length, forced after max block length
+//      Pavlovian:    LEFT  = left cue, reward with prob after cue, no response needed
+//                    RIGHT = right cue, reward with prob after cue, no response needed
+//                    PavlovianLickToStart: lick block spout after reward before next trial starts
+//      Delayed-Resp: LEFT/RIGHT = sample cue -> DELAY -> START_CUE -> SELECTION (lick block spout for reward)
+//                    licks in DELAY or START_CUE are penalized only if penalty duration > 0
+//  - Cues: cuesInstructed = true, left cue on SpeakerPinL and right cue on SpeakerPinR
+//          cuesInstructed = false, block cue plays on both speakers (uninstructed)
+//  - Four mutually exclusive task modes: taskLLLR (default), task2ABT, taskPavlovian, taskDelayedResponse
+//  - Same hardware pins / serial protocol style / EEPROM scheme / opto / sync as teensy1spout
 
-// ANALOG_A1 - SpeakerPinR
-// ANALOG_A0 - LeftLickPin
-// DAC1 (PIN41) - RightLickPin
-// DAC0 (PIN40) - OptoPin
+// Teensy 4 breakout board
+// PIN2_S2 (PWM) - SpeakerPinL
+// PIN3_S1 (PWM) - SyncPin
+// PIN4_SLN2 - TTL SLN2 right
+// PIN5_SLN1 - TTL SLN1 left
+// PIN15_A1 (ANALOG_A1) - SpeakerPinR
+// PIN14_A0 (ANALOG_A0) - LeftLickPin
+// PIN41_A17 (DAC1) - RightLickPin
+// PIN40_A16 (DAC0) - OptoPin
 
+// Other pins in use
 // PIN9 - OptoModPin
 // PIN21 - RandomLightPin
 

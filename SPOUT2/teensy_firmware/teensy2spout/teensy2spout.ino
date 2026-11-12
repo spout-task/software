@@ -23,7 +23,7 @@
 //  - Four mutually exclusive task modes: taskLLLR (default), task2ABT, taskPavlovian, taskDelayedResponse
 //  - Same hardware pins / serial protocol style / EEPROM scheme / opto / sync as teensy1spout
 
-// Teensy 4 breakout board
+// Teensy breakout board
 // PIN2_S2 (PWM) - SpeakerPinL
 // PIN3_S1 (PWM) - SyncPin
 // PIN4_SLN2 - TTL SLN2 right
@@ -67,7 +67,7 @@ const byte SpeakerPinR = 15;    // right speaker output pin
 const byte LeftLickPin = 14;    // left lick detection - 18
 const byte RightLickPin = 41;   // right lick detection - 19
 const byte LeftRewardPin = 5;   // hardwired left spout solenoid - 9
-const byte RightRewardPin = 4;  // hardwired right spout solenofid - 8
+const byte RightRewardPin = 4;  // hardwired right spout solenoid - 8
 
 // The following pins are TTLs
 const byte LeftCueIndicatorPin = 17;      // speaker output step copy - Left tone - 48

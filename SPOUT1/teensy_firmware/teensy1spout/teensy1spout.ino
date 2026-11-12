@@ -3,7 +3,7 @@
 // go/nogo, stop-signal, fixed vs progressive ratio, Pavlovian
 // Sketch runs experiment and communicates with SPOUT1 Matlab GUI
 
-// State machine is build off teensy2spouts.ino:
+// State machine is built on teensy2spouts.ino:
 //  - Uni spout (the LEFT-side hardware on the breakout board) - all reward/lick logic uses one valve
 //  - Trial-type semantics renamed LEFT/RIGHT -> A/B because there is no physical left/right
 //      Go-Nogo:                        A = Go trial (lick to reward)
@@ -17,7 +17,7 @@
 //  - Four mutually exclusive task modes: taskGoNogo (default), taskStop, taskRatio, taskPavlCond
 //  - Same hardware pins / serial protocol style / EEPROM scheme / opto / sync as 2-spout
 
-// Teensy 4 breakout board
+// Teensy breakout board
 // PIN2_S2 (PWM) - SpeakerPinA
 // PIN3_S1 (PWM) - SyncPin
 // PIN5_SLN1 - TTL SLN1 reward
@@ -36,7 +36,7 @@
 #include <EEPROM.h>
 
 // hardware setting for testing
-const bool SpoutNotButton = false;  // true = spouts (pull down), false = buttons (pull up)
+const bool SpoutNotButton = true;  // true = spouts (pull down), false = buttons (pull up)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 // --------------------------- Modify pin numbers if needed ---------------------------------------- //

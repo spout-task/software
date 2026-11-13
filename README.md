@@ -27,6 +27,18 @@ handles the serial link.
 
 Predefined settings for each task live in the separate [settings](https://github.com/spout-task/settings) repository.
 
+### State machines
+
+<p align="center">
+  <img src="SPOUT1_state_machine.png" alt="SPOUT1 state machine">
+</p>
+<p align="center"><em>SPOUT1 state machine (one spout). Boxes are task states, arrows are the transitions between them.</em></p>
+
+<p align="center">
+  <img src="SPOUT2_state_machine.png" alt="SPOUT2 state machine">
+</p>
+<p align="center"><em>SPOUT2 state machine (two spouts), with the extra delay and start cue states and their penalties.</em></p>
+
 ## Requirements
 - **Teensy 4.1** on the [Teensy breakout board](https://github.com/spout-task/hardware/tree/main/teensy_breakout_board).
 - **Windows** computer: the GUI finds the Teensy through the Windows registry.

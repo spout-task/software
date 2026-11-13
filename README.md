@@ -49,15 +49,15 @@ The pin map of both firmwares is in the [Teensy breakout board README](https://g
 
 ## SPOUT1 and SPOUT2 GUIs
 
-Figure of SPOUT1 GUI:
 <p align="center">
   <img src="SPOUT1.png" alt="SPOUT1 GUI">
 </p>
+<p align="center"><em>SPOUT1 graphical user interface (two spouts). GUI allows to choose different tasks and change task variables.</em></p>
 
-Figure of SPOUT2 GUI:
 <p align="center">
   <img src="SPOUT2.png" alt="SPOUT2 GUI">
 </p>
+<p align="center"><em>SPOUT2 graphical user interface (two spouts). GUI allows to include closed-loop optogenetics stimulation.</em></p>
 
 ## Related repositories
 [hardware](https://github.com/spout-task/hardware), [analyses](https://github.com/spout-task/analyses), [settings](https://github.com/spout-task/settings), [example_data](https://github.com/spout-task/example_data)

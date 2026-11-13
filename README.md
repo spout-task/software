@@ -15,23 +15,6 @@ the Teensy reports. Open the `.ino` in the Arduino IDE with **Teensyduino** and 
 The Teensy EEPROM keeps the last settings across sessions, even when the power is off.
 SPOUT needs a **Teensy 4.1**: pins 40 and 41 do not exist on the Teensy 4.0.
 
-## MATLAB graphical user interfaces
-`SPOUTn.mlapp` (MATLAB App Designer) connects to the Teensy, loads a task settings file,
-sets parameters, runs the session, and reports performance live. `AppArduinoConnection.m`
-handles the serial link.
-
-### SPOUT1 and SPOUT2 GUIs
-
-<p align="center">
-  <img src="SPOUT1.png" alt="SPOUT1 GUI">
-</p>
-<p align="center"><em>SPOUT1 graphical user interface (two spouts). GUI allows to choose different tasks and change task variables.</em></p>
-
-<p align="center">
-  <img src="SPOUT2.png" alt="SPOUT2 GUI">
-</p>
-<p align="center"><em>SPOUT2 graphical user interface (two spouts). GUI allows to include closed-loop optogenetics stimulation.</em></p>
-
 ## Task modes
 **SPOUT1:** go/no-go, stop-signal, fixed-ratio, progressive-ratio, Pavlovian conditioning
 
@@ -50,6 +33,23 @@ Predefined settings for each task live in the separate [settings](https://github
   <img src="SPOUT2_state_machine.png" alt="SPOUT2 state machine">
 </p>
 <p align="center"><em>SPOUT2 state machine (two spouts), with the extra delay and start cue states and their penalties.</em></p>
+
+## MATLAB graphical user interfaces
+`SPOUTn.mlapp` (MATLAB App Designer) connects to the Teensy, loads a task settings file,
+sets parameters, runs the session, and reports performance live. `AppArduinoConnection.m`
+handles the serial link.
+
+### SPOUT1 and SPOUT2 GUIs
+
+<p align="center">
+  <img src="SPOUT1.png" alt="SPOUT1 GUI">
+</p>
+<p align="center"><em>SPOUT1 graphical user interface (two spouts). GUI allows to choose different tasks and change task variables.</em></p>
+
+<p align="center">
+  <img src="SPOUT2.png" alt="SPOUT2 GUI">
+</p>
+<p align="center"><em>SPOUT2 graphical user interface (two spouts). GUI allows to include closed-loop optogenetics stimulation.</em></p>
 
 ## Requirements
 - **Teensy 4.1** on the [Teensy breakout board](https://github.com/spout-task/hardware/tree/main/teensy_breakout_board).

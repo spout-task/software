@@ -27,12 +27,12 @@ Predefined settings for each task live in the separate [settings](https://github
 <p align="center">
   <img src="SPOUT1_state_machine.png" alt="SPOUT1 state machine">
 </p>
-<p align="center"><em>SPOUT1 state machine (one spout). Boxes are task states, arrows are the transitions between them.</em></p>
+<p align="center"><em>SPOUT1 state machine (one spout). Boxes are task states, arrows are the transitions between them. Yellow arrows are Stop-signal task and green arrows Pavlovian task specific transitions, pink represents penalties, and blue represents optogenetics stimulation.</em></p>
 
 <p align="center">
   <img src="SPOUT2_state_machine.png" alt="SPOUT2 state machine">
 </p>
-<p align="center"><em>SPOUT2 state machine (two spouts), with the extra delay and start cue states and their penalties.</em></p>
+<p align="center"><em>SPOUT2 state machine (two spouts), with the extra delay and start cue states and their penalties. Yellow arrows are Delayed-reponse task and green arrows Pavlovian task specific transitions, pink represents penalties, and blue represents optogenetics stimulation.</em></p>
 
 ## MATLAB graphical user interfaces
 `SPOUTn.mlapp` (MATLAB App Designer) connects to the Teensy, loads a task settings file,
